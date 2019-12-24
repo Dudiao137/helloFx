@@ -1,5 +1,8 @@
 package win.ots.hello;
 
+import javafx.animation.Animation;
+import javafx.animation.Interpolator;
+import javafx.animation.RotateTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -19,6 +22,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * @author sy.wang
@@ -30,14 +34,11 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Ellipse ellipse = new Ellipse(110, 70);
 
-
         Stop[] stops = new Stop[] {new Stop(0, Color.DODGERBLUE),
                 new Stop(0.5, Color.LIGHTBLUE),
                 new Stop(1.0, Color.LIGHTGREEN)};
         LinearGradient gradient = new LinearGradient(0, 0, 0, 1, true,
                 CycleMethod.NO_CYCLE, stops);
-
-//        ellipse.setFill(Color.LIGHTBLUE);
         ellipse.setFill(gradient);
         ellipse.setEffect(new DropShadow(30, 10, 10, Color.GRAY));
 
@@ -48,24 +49,31 @@ public class Main extends Application {
         r.setTopOpacity(1.0);
         text.setEffect(r);
 
+
+
         StackPane root = new StackPane();
         root.getChildren().addAll(ellipse, text);
 
-//        Group root = new Group(ellipse, text);
-//        ellipse.setCenterX(350/2);
-//        ellipse.setCenterY(230/2);
-//
-//        text.setX(350/2-text.getLayoutBounds().getWidth()/2);
-//        text.setY(230/2+text.getLayoutBounds().getHeight()/2);
+        RotateTransition rotate = new RotateTransition(Duration.millis(2500), root);
+        rotate.setToAngle(360);
+        rotate.setFromAngle(0);
+        rotate.setInterpolator(Interpolator.LINEAR);
+        rotate.setCycleCount(Integer.MAX_VALUE);
 
-//        BorderPane root = new BorderPane();
-//        Label colorLabel = new Label("Color: Light blue");
-//        colorLabel.setFont(new Font("Verdana", 18));
-//        root.setTop(colorLabel);
-//        Rectangle rectangle = new Rectangle(100, 50, Color.LIGHTBLUE);
-//        root.setCenter(rectangle);
-//        BorderPane.setAlignment(colorLabel, Pos.CENTER);
-//        BorderPane.setMargin(colorLabel, new Insets(20, 10, 5, 10));
+        root.setOnMouseClicked( mouseEvent -> {
+            String msg = String.format("clicked at point (%.1f,%.1f), in scene (%.1f,%.1f), in window (%.1f,%.1f)",
+                    mouseEvent.getX(), mouseEvent.getY(), mouseEvent.getSceneX(), mouseEvent.getSceneY(),
+                    mouseEvent.getScreenX(), mouseEvent.getScreenY());
+
+            System.out.println(msg);
+
+            if (rotate.getStatus().equals(Animation.Status.RUNNING)) {
+                rotate.pause();
+            } else {
+                rotate.play();
+            }
+        });
+
 
 
         Scene scene = new Scene(root, 350, 230, Color.LIGHTYELLOW);
