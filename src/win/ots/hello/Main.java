@@ -4,19 +4,11 @@ import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
 import javafx.application.Application;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableObjectValue;
-import javafx.beans.value.ObservableValue;
-import javafx.geometry.Insets;
+import javafx.beans.binding.When;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Reflection;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -24,7 +16,6 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -55,8 +46,6 @@ public class Main extends Application {
         r.setTopOpacity(1.0);
         text.setEffect(r);
 
-
-
         StackPane stackPane = new StackPane();
         stackPane.setPrefSize(350, 230);
         stackPane.getChildren().addAll(ellipse, text);
@@ -82,21 +71,19 @@ public class Main extends Application {
         });
 
 
-        Text statusText = new Text();
-        statusText.setText("test");
-        statusText.setFont(new Font("Arial Bold", 14));
-        VBox box = new VBox(stackPane, statusText);
-        box.setAlignment(Pos.CENTER);
+        Text statusText = new Text("Test");
+        statusText.setFont(new Font("Arial Bold", 20));
 
-//        rotate.statusProperty().addListener(
-//                observable -> statusText.setText("Animation status: "
-//                        + ((ObservableObjectValue<Animation.Status>) observable).getValue())
-//        );
-
-        rotate.statusProperty().addListener(
-                (observable, oldValue, newValue) -> statusText.setText("From " + oldValue + " to " + newValue)
+        statusText.textProperty().bind(stackPane.rotateProperty().asString("Rotate : %.1f"));
+        statusText.strokeProperty().bind(
+                new When(rotate.statusProperty().isEqualTo(Animation.Status.RUNNING))
+                        .then(Color.GREEN)
+                        .otherwise(Color.RED)
         );
 
+
+        VBox box = new VBox(stackPane, statusText);
+        box.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(box, 500, 300, Color.LIGHTYELLOW);
 
