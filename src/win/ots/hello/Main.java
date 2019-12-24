@@ -4,6 +4,11 @@ import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
 import javafx.application.Application;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableObjectValue;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -13,6 +18,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Reflection;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -51,16 +57,17 @@ public class Main extends Application {
 
 
 
-        StackPane root = new StackPane();
-        root.getChildren().addAll(ellipse, text);
+        StackPane stackPane = new StackPane();
+        stackPane.setPrefSize(350, 230);
+        stackPane.getChildren().addAll(ellipse, text);
 
-        RotateTransition rotate = new RotateTransition(Duration.millis(2500), root);
+        RotateTransition rotate = new RotateTransition(Duration.millis(2500), stackPane);
         rotate.setToAngle(360);
         rotate.setFromAngle(0);
         rotate.setInterpolator(Interpolator.LINEAR);
         rotate.setCycleCount(Integer.MAX_VALUE);
 
-        root.setOnMouseClicked( mouseEvent -> {
+        stackPane.setOnMouseClicked( mouseEvent -> {
             String msg = String.format("clicked at point (%.1f,%.1f), in scene (%.1f,%.1f), in window (%.1f,%.1f)",
                     mouseEvent.getX(), mouseEvent.getY(), mouseEvent.getSceneX(), mouseEvent.getSceneY(),
                     mouseEvent.getScreenX(), mouseEvent.getScreenY());
@@ -75,8 +82,23 @@ public class Main extends Application {
         });
 
 
+        Text statusText = new Text();
+        statusText.setText("test");
+        statusText.setFont(new Font("Arial Bold", 14));
+        VBox box = new VBox(stackPane, statusText);
+        box.setAlignment(Pos.CENTER);
 
-        Scene scene = new Scene(root, 350, 230, Color.LIGHTYELLOW);
+//        rotate.statusProperty().addListener(
+//                observable -> statusText.setText("Animation status: "
+//                        + ((ObservableObjectValue<Animation.Status>) observable).getValue())
+//        );
+
+        rotate.statusProperty().addListener(
+                (observable, oldValue, newValue) -> statusText.setText("From " + oldValue + " to " + newValue)
+        );
+
+
+        Scene scene = new Scene(box, 500, 300, Color.LIGHTYELLOW);
 
         primaryStage.setTitle("MyShapes with java fx");
         primaryStage.setScene(scene);
