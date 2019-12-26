@@ -12,7 +12,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="win.ots.hellefx.controller.AddressController">
+<?import com.jfoenix.controls.JFXButton?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="win.ots.hellefx.controller.AddressController"
+            stylesheets="@../css/main.css">
    <children>
       <SplitPane dividerPositions="0.29797979797979796" layoutX="143.0" layoutY="98.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
@@ -53,19 +58,20 @@
                         <Label GridPane.rowIndex="4" text="Job:" />
                         <Label GridPane.rowIndex="5" text="Address:" />
                         <Label GridPane.rowIndex="6" text="Notes:" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="name" />
+                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="phone" />
+                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" fx:id="group" />
+                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" fx:id="birthDay" />
+                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="4" fx:id="job" />
+                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="5" fx:id="address" />
+                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="6" fx:id="note" />
                      </children>
                   </GridPane>
                   <HBox layoutX="246.0" layoutY="338.0" spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0">
                      <children>
-                        <Button mnemonicParsing="false" text="Button" />
-                        <Button mnemonicParsing="false" text="Button" />
+                        <JFXButton mnemonicParsing="false" text="Add" onAction="#addHandler" />
+                        <JFXButton mnemonicParsing="false" text="Update" onAction="#updateHandler" />
+                        <JFXButton mnemonicParsing="false" text="Delete" onAction="#deleteHandler" />
                      </children>
                   </HBox>
                </children>
