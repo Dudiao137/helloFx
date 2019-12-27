@@ -1,4 +1,4 @@
 
 JFXButton {
-    border: aquamarine;
+    -fx-background-color: red;
 }
